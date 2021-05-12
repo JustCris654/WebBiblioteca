@@ -1,12 +1,12 @@
 <%@ page import="com.justcris.WebBiblioteca.AccessDatabase" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.justcris.WebBiblioteca.Book" %><%--
+<%@ page import="com.justcris.WebBiblioteca.Book" %>
+<%--
   Created by IntelliJ IDEA.
   User: CSCAPIN
   Date: 11/05/2021
   Time: 11:38
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -22,34 +22,45 @@
     AccessDatabase accessDatabase = new AccessDatabase();
     Connection conn = accessDatabase.GetConnection();
     ArrayList<Book> books = accessDatabase.GetListaLibri(conn);
-    if(books == null){
-        out.println("caca");
-    }
 %>
-<table class="table table-dark table-borderless">
-    <thead>
-    <tr>
-        <th scope="col">ISBN</th>
-        <th scope="col">Titolo</th>
-        <th scope="col">Autore</th>
-        <th scope="col">Numero Pagine</th>
-    </tr>
-    </thead>
-    <tbody>=
-    <%
-        for (int i = 0; i < books.size(); i++) {
-            out.println("<tr>" +
-                    "<th scope='row'>" + (i + 1) + "</th>" +
-                    "<td>" + books.get(i).getIsbn() + "</td>" +
-                    "<td>" + books.get(i).getTitle() + "</td>" +
-                    "<td>" + books.get(i).getAuthor() + "</td>" +
-                    "<td>" + books.get(i).getN_pages() + "</td>" +
-                    "</tr>"
-            );
-        }
-    %>
-    </tbody>
-</table>
+<div style="width: 60%; margin: auto">
+    <table class="table table-dark table-borderless">
+        <thead>
+        <tr>
+            <th scope="col">N</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Titolo</th>
+            <th scope="col">Autore</th>
+            <th scope="col">Numero Pagine</th>
+            <th scope="col">Seleziona per cancellare</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+            for (int i = 0; i < books.size(); i++) {
+                out.println("<tr>" +
+                        "<th scope='row'>" + (i + 1) + "</th>" +
+                        "<td>" + books.get(i).getIsbn() + "</td>" +
+                        "<td>" + books.get(i).getTitle() + "</td>" +
+                        "<td>" + books.get(i).getAuthor() + "</td>" +
+                        "<td>" + books.get(i).getN_pages() + "</td>" +
+                        "<td><div class=\"form-check\">\n" +
+                        "  <input class=\"form-check-input\" " +
+                        "type=\"checkbox\" value=\"\" " +
+                        "name=\"" + books.get(i).getIsbn() + "\" " +
+                        "id=\"" + books.get(i).getIsbn() + "\">\n" +
+                        "  <label class=\"form-check-label\" " +
+                        "for=\"" + books.get(i).getIsbn() + "\">\n" +
+                        "    Cancella\n" +
+                        "  </label>\n" +
+                        "</div></td>" +
+                        "</tr>"
+                );
+            }
+        %>
+        </tbody>
+    </table>
+</div>
 
 
 <script

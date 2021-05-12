@@ -2,11 +2,12 @@ package com.justcris.WebBiblioteca;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AccessDatabase {
 
     final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    final String DB_URL = "jdbc:mysql://127.0.0.1/patente";
+    final String DB_URL = "jdbc:mysql://127.0.0.1/biblioteca";
 
     //  Database credentials
     final String USER = "root";
@@ -41,6 +42,7 @@ public class AccessDatabase {
             ResultSet resultSet = stmt.executeQuery(sql);
 
             ArrayList<Book> books = new ArrayList<>();
+            System.out.println("Array creato");
             while (resultSet.next()) {
                 books.add(
                         new Book(
@@ -50,7 +52,9 @@ public class AccessDatabase {
                                 resultSet.getInt("npagine")
                         )
                 );
+                System.out.println("Valore aggiunto");
             }
+            System.out.println(Arrays.toString(books.toArray()));
             return books;
         } catch (Exception e) {
             e.printStackTrace();
