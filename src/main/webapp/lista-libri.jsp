@@ -1,7 +1,8 @@
 <%@ page import="com.justcris.WebBiblioteca.AccessDatabase" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.justcris.WebBiblioteca.Book" %><%--
+<%@ page import="com.justcris.WebBiblioteca.Book" %>
+<%@ page import="java.util.Objects" %><%--
   Created by IntelliJ IDEA.
   User: CSCAPIN
   Date: 11/05/2021
@@ -22,30 +23,35 @@
     AccessDatabase accessDatabase = new AccessDatabase();
     Connection conn = accessDatabase.GetConnection();
     ArrayList<Book> books = accessDatabase.GetListaLibri(conn);
-    if(books == null){
+    if (books == null) {
         out.println("caca");
     }
 %>
 <table class="table table-dark table-borderless">
     <thead>
     <tr>
+        <th scope="col">Numero</th>
         <th scope="col">ISBN</th>
         <th scope="col">Titolo</th>
         <th scope="col">Autore</th>
         <th scope="col">Numero Pagine</th>
+        <th scope="col">Cancella</th>
     </tr>
     </thead>
-    <tbody>=
+    <tbody>
     <%
-        for (int i = 0; i < books.size(); i++) {
-            out.println("<tr>" +
-                    "<th scope='row'>" + (i + 1) + "</th>" +
-                    "<td>" + books.get(i).getIsbn() + "</td>" +
-                    "<td>" + books.get(i).getTitle() + "</td>" +
-                    "<td>" + books.get(i).getAuthor() + "</td>" +
-                    "<td>" + books.get(i).getN_pages() + "</td>" +
-                    "</tr>"
-            );
+        if (books != null) {
+            for (int i = 0; i < Objects.requireNonNull(books).size(); i++) {
+                out.println("<tr>" +
+                        "<td scope='row'>" + (i + 1) + "</td>" +
+                        "<td>" + books.get(i).getIsbn() + "</td>" +
+                        "<td>" + books.get(i).getTitle() + "</td>" +
+                        "<td>" + books.get(i).getAuthor() + "</td>" +
+                        "<td>" + books.get(i).getN_pages() + "</td>" +
+                        "<td><input type=\"checkbox\" id=\"book" + i + "\" name=\"bookToDelete\" value=\"delete\"><label for=\"book" + i + "\">Delete</label></td>" +
+                        "</tr>"
+                );
+            }
         }
     %>
     </tbody>

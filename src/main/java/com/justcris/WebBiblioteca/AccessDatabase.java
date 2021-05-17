@@ -35,7 +35,7 @@ public class AccessDatabase {
 
     public ArrayList<Book> GetListaLibri(Connection conn) {
         try {
-            String sql = "select * from libri";
+            String sql = "select * from biblioteca.libri";
             Statement stmt = conn.createStatement();
 
             ResultSet resultSet = stmt.executeQuery(sql);
@@ -44,10 +44,10 @@ public class AccessDatabase {
             while (resultSet.next()) {
                 books.add(
                         new Book(
-                                resultSet.getString("isbn"),
-                                resultSet.getString("titolo"),
-                                resultSet.getString("autore"),
-                                resultSet.getInt("npagine")
+                                resultSet.getString("Isbn"),
+                                resultSet.getString("Titolo"),
+                                resultSet.getString("Autore"),
+                                resultSet.getInt("Npagine")
                         )
                 );
             }
