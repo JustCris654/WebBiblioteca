@@ -24,44 +24,60 @@
     ArrayList<Book> books = accessDatabase.GetListaLibri(conn);
 %>
 <div style="width: 60%; margin: auto">
-
-    <table class="table table-dark table-borderless">
-        <thead>
-        <tr>
-            <th scope="col">N</th>
-            <th scope="col">ISBN</th>
-            <th scope="col">Titolo</th>
-            <th scope="col">Autore</th>
-            <th scope="col">Numero Pagine</th>
-            <th scope="col">Seleziona per cancellare</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%
-            for (int i = 0; i < books.size(); i++) {
-                out.println("<tr>" +
-                        "<th scope='row'>" + (i + 1) + "</th>" +
-                        "<td>" + books.get(i).getIsbn() + "</td>" +
-                        "<td>" + books.get(i).getTitle() + "</td>" +
-                        "<td>" + books.get(i).getAuthor() + "</td>" +
-                        "<td>" + books.get(i).getN_pages() + "</td>" +
-                        "<td><div class=\"form-check\">\n" +
-                        "  <input class=\"form-check-input\" " +
-                        "type=\"checkbox\" value=\"\" " +
-                        "name=\"" + books.get(i).getIsbn() + "\" " +
-                        "id=\"" + books.get(i).getIsbn() + "\">\n" +
-                        "  <label class=\"form-check-label\" " +
-                        "for=\"" + books.get(i).getIsbn() + "\">\n" +
-                        "    Cancella\n" +
-                        "  </label>\n" +
-                        "</div></td>" +
-                        "</tr>"
-                );
-            }
-        %>
-        </tbody>
-    </table>
+    <form action="lista-libri.jsp" method="post">
+        <table class="table table-dark table-borderless">
+            <thead>
+            <tr>
+                <th scope="col">N</th>
+                <th scope="col">ISBN</th>
+                <th scope="col">Titolo</th>
+                <th scope="col">Autore</th>
+                <th scope="col">Numero Pagine</th>
+                <th scope="col">Seleziona per cancellare</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+                for (int i = 0; i < books.size(); i++) {
+                    out.println("<tr>" +
+                            "<th scope='row'>" + (i + 1) + "</th>" +
+                            "<td>" + books.get(i).getIsbn() + "</td>" +
+                            "<td>" + books.get(i).getTitle() + "</td>" +
+                            "<td>" + books.get(i).getAuthor() + "</td>" +
+                            "<td>" + books.get(i).getN_pages() + "</td>" +
+                            "<td><div class=\"form-check\">\n" +
+                            "  <input class=\"form-check-input\" " +
+                            "type=\"checkbox\" value=\"" + books.get(i).getIsbn() + "\" " +
+                            "name=\"isbn_libri\" " +
+                            "id=\"" + books.get(i).getIsbn() + "\">\n" +
+                            "  <label class=\"form-check-label\" " +
+                            "for=\"" + books.get(i).getIsbn() + "\">\n" +
+                            "    Cancella\n" +
+                            "  </label>\n" +
+                            "</div></td>" +
+                            "</tr>"
+                    );
+                }
+            %>
+            </tbody>
+        </table>
+        <input type="submit" value="Cancella libri selezionati" name="submit" id="submit">
+    </form>
 </div>
+
+<%
+    System.out.println("ciao");
+    if (request.getParameter("submit") != null) {
+        System.out.println("ora cancello");
+        String[] isbns = request.getParameterValues("isbn_libri");
+        boolean delete = accessDatabase.DeleteBooks(conn, isbns);
+        if (delete) {
+            out.println("<script> alert('Libri cancellati correttamente); </script>");
+        } else {
+            out.println("<script> alert('Problema con la cancellazione'); </script>");
+        }
+    }
+%>
 
 
 <script

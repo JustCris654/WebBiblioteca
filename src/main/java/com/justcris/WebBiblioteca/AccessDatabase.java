@@ -17,6 +17,33 @@ public class AccessDatabase {
     public AccessDatabase() {
     }
 
+    public ArrayList<Book> GetListaLibri(Connection conn) {
+        try {
+            String sql = "select * from libri";
+            Statement stmt = conn.createStatement();
+
+            ResultSet resultSet = stmt.executeQuery(sql);
+
+            ArrayList<Book> books = new ArrayList<>();
+            while (resultSet.next()) {
+                books.add(
+                        new Book(
+                                resultSet.getString("isbn"),
+                                resultSet.getString("titolo"),
+                                resultSet.getString("autore"),
+                                resultSet.getInt("npagine")
+                        )
+                );
+            }
+            System.out.println(Arrays.toString(books.toArray()));
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     public Connection GetConnection() {
         Connection conn = null;
         try {
@@ -34,32 +61,22 @@ public class AccessDatabase {
         }
     }
 
-    public ArrayList<Book> GetListaLibri(Connection conn) {
+    public boolean DeleteBooks(Connection conn, String[] isbn_list) {
         try {
-            String sql = "select * from libri";
+            StringBuilder sql = new StringBuilder("delete  from libri\n" +
+                    "where Isbn='" + isbn_list[0] + "'");
+            for (int i = 1; i < isbn_list.length; i++) {
+                sql.append(" or Isbn='").append(isbn_list[i]).append("'");
+            }
+
             Statement stmt = conn.createStatement();
 
-            ResultSet resultSet = stmt.executeQuery(sql);
+            stmt.executeUpdate(sql.toString());
 
-            ArrayList<Book> books = new ArrayList<>();
-            System.out.println("Array creato");
-            while (resultSet.next()) {
-                books.add(
-                        new Book(
-                                resultSet.getString("isbn"),
-                                resultSet.getString("titolo"),
-                                resultSet.getString("autore"),
-                                resultSet.getInt("npagine")
-                        )
-                );
-                System.out.println("Valore aggiunto");
-            }
-            System.out.println(Arrays.toString(books.toArray()));
-            return books;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
-
     }
 }
