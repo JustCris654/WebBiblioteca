@@ -79,4 +79,17 @@ public class AccessDatabase {
             return false;
         }
     }
+
+    public boolean AddBook(Connection conn, String title, String author, String isbn, int npag) throws SQLException {
+        PreparedStatement statement = conn.prepareStatement("insert into biblioteca.libri(isbn, titolo, autore, npagine) \n" +
+                "values (?,?,?,?)");
+        statement.setString(1, isbn);
+        statement.setString(2, title);
+        statement.setString(3, author);
+        statement.setInt(4,npag);
+
+        int row = statement.executeUpdate();
+        System.out.println("row: "+row);
+        return row==1;
+    }
 }

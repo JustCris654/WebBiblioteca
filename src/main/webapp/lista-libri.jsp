@@ -24,7 +24,30 @@
     ArrayList<Book> books = accessDatabase.GetListaLibri(conn);
 %>
 <div style="width: 60%; margin: auto">
-    <form action="lista-libri.jsp" method="post">
+    <h1 style="text-align: center">Aggiungi libro</h1>
+    <form action="add_book.jsp" method="post">
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" name="title" id="title" placeholder="Titolo" aria-label="Titolo">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" name="author" id="author" placeholder="Autore" aria-label="Autore">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <input type="number" class="form-control" name="isbn" id="isbn" placeholder="isbn" aria-label="isbn">
+            </div>
+            <div class="col">
+                <input type="number" class="form-control" name="npag" id="npag" placeholder="Numero pagine" aria-label="Numero pagine">
+            </div>
+        </div>
+        <input type="submit" value="Send" name="send" id="send" class="btn btn-primary">
+    </form>
+</div>
+<div style="width: 60%; margin: auto">
+    <form action="deleteBooks.jsp" method="post">
         <table class="table table-dark table-borderless">
             <thead>
             <tr>
@@ -41,7 +64,7 @@
                 for (int i = 0; i < books.size(); i++) {
                     out.println("<tr>" +
                             "<th scope='row'>" + (i + 1) + "</th>" +
-                            "<td>" + books.get(i).getIsbn() + "</td>" +
+                            "<td    >" + books.get(i).getIsbn() + "</td>" +
                             "<td>" + books.get(i).getTitle() + "</td>" +
                             "<td>" + books.get(i).getAuthor() + "</td>" +
                             "<td>" + books.get(i).getN_pages() + "</td>" +
@@ -64,20 +87,6 @@
         <input type="submit" value="Cancella libri selezionati" name="submit" id="submit">
     </form>
 </div>
-
-<%
-    System.out.println("ciao");
-    if (request.getParameter("submit") != null) {
-        System.out.println("ora cancello");
-        String[] isbns = request.getParameterValues("isbn_libri");
-        boolean delete = accessDatabase.DeleteBooks(conn, isbns);
-        if (delete) {
-            out.println("<script> alert('Libri cancellati correttamente); </script>");
-        } else {
-            out.println("<script> alert('Problema con la cancellazione'); </script>");
-        }
-    }
-%>
 
 
 <script
